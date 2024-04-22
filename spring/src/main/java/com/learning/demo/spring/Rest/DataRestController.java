@@ -26,11 +26,14 @@ public class DataRestController {
 	    try {
 	      List<Data> names = new ArrayList<Data>();
 	      datarepository.findAll().forEach(names::add);
-	      
+	      if (name == null)
+	    	  datarepository.findAll().forEach(names::add);
+	        else
+	        	datarepository.findByNameContaining(name).forEach(names::add);
 	      if (names.isEmpty()) {
 	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	      }
-
+	      System.out.println("successfully fetched");
 	      return new ResponseEntity<>(names, HttpStatus.OK);
 	    } catch (Exception e) {
 	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -40,9 +43,11 @@ public class DataRestController {
 	public ResponseEntity<Data> addData(@RequestBody Data data)
 	{
 		try {
-	      Data data1=datarepository.save(data);
+	      Data data1=datarepository.save(new Data(data.getName()));
 	      
+	      System.out.println("successfully created");  
 		return new ResponseEntity<>(data1, HttpStatus.CREATED);
+		
 		}
 		catch(Exception e)
 		{
