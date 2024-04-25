@@ -26,10 +26,7 @@ public class DataRestController {
 	    try {
 	      List<Data> names = new ArrayList<Data>();
 	      datarepository.findAll().forEach(names::add);
-	      if (name == null)
-	    	  datarepository.findAll().forEach(names::add);
-	        else
-	        	datarepository.findByNameContaining(name).forEach(names::add);
+	      
 	      if (names.isEmpty()) {
 	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	      }
