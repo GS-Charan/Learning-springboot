@@ -5,6 +5,7 @@ import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -16,19 +17,28 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.learning.demo.spring.repository.AccDetailsRepository;
+import com.learning.demo.spring.Config.PasswordEncoder;
 import com.learning.demo.spring.model.AccDetails;
 
 
 @RestController
 @RequestMapping("/acc")
 public class AccRestController {
+	@Autowired
 	AccDetailsRepository accdetailsrepository;
+	@Lazy
+	@Autowired
+	PasswordEncoder passwordencoder;
 	
 	@PostMapping("/Details/send")
 	public ResponseEntity<AccDetails> addAccDetails(@RequestBody AccDetails accdetails)
 	{
 		try {
-			AccDetails acc=accdetailsrepository.save(new AccDetails(accdetails.getUsername(), accdetails.getEmail(), accdetails.getPassword()));
+			
+			String password = accdetails.getPassword();
+			
+			String Encryptedpassword=passwordencoder.passwordEncode(password);
+			AccDetails acc=accdetailsrepository.save(new AccDetails(accdetails.getUsername(), accdetails.getEmail(), Encryptedpassword));
 	      
 	      System.out.println("successfully created");  
 		return new ResponseEntity<>(acc, HttpStatus.CREATED);
