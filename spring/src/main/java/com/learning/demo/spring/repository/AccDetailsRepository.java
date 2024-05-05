@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.learning.demo.spring.model.AccDetails;
 
-public interface AccDetailsRepository extends JpaRepository<AccDetails, String> {
+public interface AccDetailsRepository extends JpaRepository<AccDetails, Long> {
+	AccDetails findByUsername(String username);
 
 }

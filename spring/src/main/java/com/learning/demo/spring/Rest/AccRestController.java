@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.learning.demo.spring.resources.UserCredentialsDto;
+import com.learning.demo.spring.resources.VerifyDto;
 import com.learning.demo.spring.repository.AccDetailsRepository;
 import com.learning.demo.spring.Config.PasswordEncoder;
 import com.learning.demo.spring.model.AccDetails;
@@ -61,5 +62,32 @@ public class AccRestController {
     	
     	return new ResponseEntity<>("Successfull",HttpStatus.CREATED);
 
-}
+    }
+    
+    @PostMapping("/verify")
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public ResponseEntity<String> Verify(@RequestBody VerifyDto verifyDto)
+    {
+    	String username=verifyDto.getUsername();
+    	
+    	
+        AccDetails userDetails = accdetailsrepository.findByUsername(username);
+        
+        if (userDetails == null) {
+            // User not found, handle this scenario accordingly
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+        
+        String encodedPassword = userDetails.getPassword();
+        if (PasswordEncoder.matches(verifyDto.getPassword(), encodedPassword)) {
+            // Passwords match, you can return a success response
+            return ResponseEntity.ok("Verification successful");
+        } else {
+            // Passwords don't match, handle this scenario accordingly
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password");
+        }
+        
+    	
+    	
+    }
 }
