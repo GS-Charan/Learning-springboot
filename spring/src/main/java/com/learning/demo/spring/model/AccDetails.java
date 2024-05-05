@@ -16,6 +16,9 @@ import java.util.Set;
 @Table(name="AccountDetails")
 public class AccDetails {
 	@Id 
+	
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long Id;
 	private String username;
 
 	  private String password;

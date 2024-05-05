@@ -13,10 +13,15 @@ public class SecurityConfiguration {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 			.authorizeHttpRequests((authorize) -> authorize
-				.requestMatchers("/registration").permitAll()
-				.anyRequest().authenticated()
-			);
+				.requestMatchers("/api/registration").permitAll()
+				.anyRequest().permitAll()
+				
+				
+			)
+			.csrf(csrf -> csrf.disable());
 
 		return http.build();
 	}
 }
+	
+	

@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/registration")
+@RequestMapping("/api")
 public class AccRestController {
 	@Autowired
 	private final AccDetailsRepository accdetailsrepository;
