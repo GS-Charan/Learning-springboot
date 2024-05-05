@@ -1,22 +1,23 @@
 package com.learning.demo.spring.Config;
-
-import java.security.SecureRandom;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import java.security.SecureRandom;
 
-@Configuration
 public class PasswordEncoder {
-    @Bean
-	public String passwordEncode(String plainPassword)
-	{
-		
-		 BCryptPasswordEncoder bCryptPasswordEncoder =new BCryptPasswordEncoder(10, new SecureRandom());
-		 
-		return bCryptPasswordEncoder.encode(plainPassword);
-		
-	}
-	
 
+    private static final int STRENGTH = 10;
+
+    private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(STRENGTH, new SecureRandom());
+
+    private PasswordEncoder() {
+        // Private constructor to prevent instantiation
+    }
+
+    public static String encode(String plainPassword) {
+        return passwordEncoder.encode(plainPassword);
+    }
+
+    public static boolean matches(String plainPassword, String encodedPassword) {
+        return passwordEncoder.matches(plainPassword, encodedPassword);
+    }
 }

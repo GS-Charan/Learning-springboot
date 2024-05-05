@@ -1,72 +1,36 @@
 package com.learning.demo.spring.model;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
+import java.util.Set;
+
+
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name="AccountDetails")
 public class AccDetails {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
-	
-	
-	@Column(name = "Username")
+	@Id 
 	private String username;
+
+	  private String password;
+	  private String Email;
+
+	  boolean enabled;
 	
-	@Column(name = "Email id")
-	private String email;
-	
-	@Column(name = "Password")
-	private String password;
-	
-	@JsonCreator
-	public AccDetails(@JsonProperty("username")String username,@JsonProperty("email")String email,@JsonProperty("password")String password)
-	{
-		this.username=username;
-		this.email=email;
-		this.password=password;
+	  
+	  
+	  @Column(name = "authority")
+	  private Set<String> roles;
 
 
 		
-	}
-	
-	public AccDetails()
-	{
-		
-		
-	}
 
 	
-	public String getUsername()
-	{
-		return username;
-		
-	}
-	public void setUsername(String username)
-	{
-		this.username=username;
-		
-	}
 	
-	public String getEmail()
-	{
-		return email;
-		
-	}
-	public void setEmail(String email)
-	{
-		this.email=email;
-		
-	}
-	public String getPassword()
-	{
-		return password;
-		
-	}
-	public void setPassword(String password)
-	{
-		this.password=password;
-		
-	}
 }
