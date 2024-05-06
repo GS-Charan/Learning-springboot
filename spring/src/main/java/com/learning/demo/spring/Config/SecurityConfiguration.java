@@ -13,8 +13,8 @@ public class SecurityConfiguration {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 			.authorizeHttpRequests((authorize) -> authorize
-				.requestMatchers("/api/registration").permitAll()
-				.anyRequest().permitAll()
+				.requestMatchers("/api/registration","/api/verify").permitAll()
+				.anyRequest().authenticated()
 				
 				
 			)

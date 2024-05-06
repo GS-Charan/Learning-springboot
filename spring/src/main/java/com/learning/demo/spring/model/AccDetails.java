@@ -29,7 +29,7 @@ public class AccDetails {
 	  
 	  
 	  @Column(name = "authority")
-	  private Set<String> roles;
+	    private String roles;
 
 
 		

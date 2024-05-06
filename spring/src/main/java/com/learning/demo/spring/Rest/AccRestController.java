@@ -55,7 +55,7 @@ public class AccRestController {
               .username(userCredentialsDto.getUsername())
               .password(PasswordEncoder.encode(userCredentialsDto.getPassword()))
               .Email(userCredentialsDto.getEmail())
-              .roles(Set.of("USER"))
+              .roles("USER")
               .build();
     	accdetailsrepository.save(user);
     	System.out.println("successfull");
