@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.learning.demo.spring.resources.UserCredentialsDto;
 import com.learning.demo.spring.resources.VerifyDto;
 import com.learning.demo.spring.repository.AccDetailsRepository;
+import com.learning.demo.spring.Config.JwtUtils;
 import com.learning.demo.spring.Config.PasswordEncoder;
 import com.learning.demo.spring.model.AccDetails;
 import com.learning.demo.spring.model.Data;
@@ -40,7 +43,8 @@ public class AccRestController {
 	
 	
 	
-	
+	 @Autowired
+	  JwtUtils jwtUtils;
 
     public AccRestController(AccDetailsRepository accdetailsrepository) {
         this.accdetailsrepository=accdetailsrepository;
@@ -66,7 +70,7 @@ public class AccRestController {
     
     @PostMapping("/verify")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public ResponseEntity<String> Verify(@RequestBody VerifyDto verifyDto)
+    public ResponseEntity<?> Verify(@Valid @RequestBody VerifyDto verifyDto)
     {
     	String username=verifyDto.getUsername();
     	
@@ -80,8 +84,24 @@ public class AccRestController {
         
         String encodedPassword = userDetails.getPassword();
         if (PasswordEncoder.matches(verifyDto.getPassword(), encodedPassword)) {
+        	
             // Passwords match, you can return a success response
-            return ResponseEntity.ok("Verification successful");
+        	Authentication authentication = authenticationManager.authenticate(
+        	        new UsernamePasswordAuthenticationToken(verifyDto.getUsername(), verifyDto.getPassword()));
+        	SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
+            
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();    
+            List<String> roles = userDetails.getAuthorities().stream()
+                .map(item -> item.getAuthority())
+                .collect(Collectors.toList());
+
+            return ResponseEntity.ok(new JwtResponse(jwt, 
+                                 userDetails.getId(), 
+                                 userDetails.getUsername(), 
+                                 userDetails.getEmail(), 
+                                 roles));
+          System.out.println("Verification successful");
         } else {
             // Passwords don't match, handle this scenario accordingly
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password");
