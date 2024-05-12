@@ -18,9 +18,14 @@ import jakarta.persistence.Id;
 @AllArgsConstructor
 @NoArgsConstructor
 public
-class VerifyDto {
-	@Id
+class UserInfoResponseDto {
   private String username;
-  private String password;
+  private String Email;
   
+  @Id
+  private Long Id;
+  
+  private String roles;
+
+
 }
