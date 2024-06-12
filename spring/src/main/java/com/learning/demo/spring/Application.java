@@ -1,15 +1,16 @@
 package com.learning.demo.spring;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
-
-@SpringBootApplication(exclude = {UserDetailsServiceAutoConfiguration.class })
+import org.springframework.boot.builder.SpringApplicationBuilder;
+@SpringBootApplication
 public class Application {
 
+	
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
-
 }
