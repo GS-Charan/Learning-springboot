@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import com.learning.demo.spring.Config.SecurityConfiguration;
 import java.util.Set;
+
+import org.hibernate.service.internal.ServiceDependencyException;
+import org.springframework.beans.factory.BeanCurrentlyInCreationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -77,7 +80,7 @@ public class AccRestController {
     
     @PostMapping("/verify")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void Verify( @RequestBody VerifyDto verifyDto)
+    public ResponseEntity<?> Verify( @RequestBody VerifyDto verifyDto)
     {
     	String username=verifyDto.getUsername();
     	
@@ -86,7 +89,7 @@ public class AccRestController {
         
         if (userDetails1 == null) 
         {
-            //return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
         
         String encodedPassword = userDetails1.getPassword();
@@ -94,7 +97,7 @@ public class AccRestController {
         {
         	
         	
-            
+         
 
             Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(verifyDto.getUsername(), verifyDto.getPassword()));
@@ -104,27 +107,24 @@ public class AccRestController {
             AccDetails userDetails = (AccDetails) authentication.getPrincipal();
 
             ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
-
+            
+            
             
             
             String role = userDetails.getRoles();
-;
-			System.out.println(ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-	                .body(new UserInfoResponseDto(userDetails.getEmail(),
-                            userDetails.getUsername(),
-                            userDetails.getId(),
-                            role)));
 
-//            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-//                .body(new UserInfoResponseDto(userDetails.getEmail(),
-//                                           userDetails.getUsername(),
-//                                           userDetails.getId(),
-//                                           role));
+			
+            
+            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                .body(new UserInfoResponseDto(userDetails.getEmail(),
+                                           userDetails.getUsername(),
+                                           userDetails.getId(),
+                                           role));
             
             
         } else {
-            // Passwords don't match, handle this scenario accordingly
-            //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password");
+             //Passwords don't match, handle this scenario accordingly
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password");
         }
         
     	

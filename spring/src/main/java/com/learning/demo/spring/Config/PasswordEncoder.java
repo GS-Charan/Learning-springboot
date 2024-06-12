@@ -1,6 +1,5 @@
 package com.learning.demo.spring.Config;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import java.security.SecureRandom;
 
 public class PasswordEncoder {
