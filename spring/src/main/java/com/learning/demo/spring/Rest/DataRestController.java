@@ -1,4 +1,6 @@
 package com.learning.demo.spring.Rest;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,8 +41,13 @@ public class DataRestController {
 	@PostMapping("/name/send")
 	public ResponseEntity<Data> addData(@RequestBody Data data)
 	{
+		 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+		   LocalDateTime now = LocalDateTime.now();  
+		   System.out.println(dtf.format(now));  
+		String time=String.valueOf(dtf.format(now));
+		data.setTime(time);
 		try {
-	      Data data1=datarepository.save(new Data(data.getName()));
+	      Data data1=datarepository.save(new Data(data.getName(),data.getTime()));
 	      
 	      System.out.println("successfully created");  
 		return new ResponseEntity<>(data1, HttpStatus.CREATED);

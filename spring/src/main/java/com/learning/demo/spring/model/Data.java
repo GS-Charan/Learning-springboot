@@ -12,16 +12,25 @@ public class Data {
 
 	@Column(name = "name")
 	private String name;
+	
+	
+	@Column(name = "time")
+	private String time;
+	
+	
 	@JsonCreator
-	public Data(@JsonProperty("name")String name)
+	public Data(@JsonProperty("name")String name,@JsonProperty("time")String time)
 	{
 		this.name=name;
+		this.time=time;
 		
 	}
 	public Data()
 	{		
 		
 	}
+	
+	
 	
 	public String getName()
 	{
@@ -31,6 +40,17 @@ public class Data {
 	public void setName(String name)
 	{
 		this.name=name;
+		
+	}
+	
+	public String getTime()
+	{
+		return time;
+		
+	}
+	public void setTime(String time)
+	{
+		this.time=time;
 		
 	}
 
